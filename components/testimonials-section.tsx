@@ -84,9 +84,10 @@ function TestimonialCard({
       }`}
       style={{
         transitionDelay: `${index * 100}ms`,
-        animation: isVisible
-          ? `float-slow ${6 + index * 0.5}s ease-in-out infinite`
-          : "none",
+        animationName: isVisible ? "float-slow" : "none",
+        animationDuration: `${6 + index * 0.5}s`,
+        animationTimingFunction: "ease-in-out",
+        animationIterationCount: "infinite",
         animationDelay: `${index * 0.3}s`,
       }}
       onMouseEnter={() => setIsHovered(true)}
