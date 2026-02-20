@@ -1,379 +1,195 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Mail, Lock, Github, Chrome, Linkedin, Eye, EyeOff, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
-import { ThreeParticleBackground } from '@/components/three-particle-background'
+import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
-  const [loginStatus, setLoginStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [focusedField, setFocusedField] = useState<string | null>(null)
+  const [generalError, setGeneralError] = useState('')
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(email)
   }
 
-  const handleSocialLogin = (provider: string) => {
-    console.log('[v0] Social login with:', provider)
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-      router.push('/dashboard')
-    }, 1500)
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
     setErrors({})
-    
+    setGeneralError('')
+
     const newErrors: { email?: string; password?: string } = {}
     if (!email) {
       newErrors.email = 'Email is required'
     } else if (!validateEmail(email)) {
-      newErrors.email = 'Invalid email format'
+      newErrors.email = 'Please enter a valid email address'
     }
-    
+
     if (!password) {
       newErrors.password = 'Password is required'
     } else if (password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters'
     }
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
-      setLoginStatus('error')
       return
     }
-    
+
     setIsLoading(true)
-    setLoginStatus('idle')
-    
+
+    // Simulate API call
     setTimeout(() => {
       setIsLoading(false)
-      setLoginStatus('success')
-      
-      setTimeout(() => {
-        router.push('/dashboard')
-      }, 800)
-    }, 2000)
-  }
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: 'easeOut' }
-    }
-  }
-
-  const floatingLabelVariants = {
-    focused: {
-      y: -28,
-      scale: 0.85,
-      x: -8,
-      color: 'rgb(59, 130, 246)',
-      transition: { duration: 0.2 }
-    },
-    unfocused: {
-      y: 0,
-      scale: 1,
-      x: 0,
-      color: 'rgb(148, 163, 184)',
-      transition: { duration: 0.2 }
-    }
+      // In a real app, you would authenticate here
+      router.push('/dashboard')
+    }, 1500)
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
-      <ThreeParticleBackground />
-      
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-        className="relative z-10 w-full max-w-md px-6"
-      >
-        <motion.div
-          variants={itemVariants}
-          className="relative backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-8 overflow-hidden"
-        >
-          <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/30 rounded-full blur-3xl animate-pulse-slow" />
-          <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-purple-500/30 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
-          
-          <div className="relative z-10">
-            <motion.div variants={itemVariants} className="text-center mb-8">
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.3 }}
-                className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg"
-              >
-                <Lock className="w-8 h-8 text-white" />
-              </motion.div>
-              <h1 className="text-3xl font-bold text-white mb-2 text-balance">Welcome Back</h1>
-              <p className="text-slate-300 text-balance">Sign in to your account to continue</p>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="space-y-3 mb-6">
-              <motion.button
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleSocialLogin('github')}
-                className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-300 backdrop-blur-sm"
-              >
-                <Github className="w-5 h-5" />
-                <span className="font-medium">Continue with GitHub</span>
-              </motion.button>
-
-              <div className="grid grid-cols-2 gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleSocialLogin('google')}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-300 backdrop-blur-sm"
-                >
-                  <Chrome className="w-5 h-5" />
-                  <span className="font-medium">Google</span>
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleSocialLogin('linkedin')}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all duration-300 backdrop-blur-sm"
-                >
-                  <Linkedin className="w-5 h-5" />
-                  <span className="font-medium">LinkedIn</span>
-                </motion.button>
-              </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="relative mb-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/20" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-slate-900/50 text-slate-300 backdrop-blur-sm rounded-full">
-                  Or continue with email
-                </span>
-              </div>
-            </motion.div>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <motion.div variants={itemVariants} className="relative">
-                {(!email && focusedField !== 'email') && (
-                  <motion.label
-                    htmlFor="email"
-                    initial={{ opacity: 1 }}
-                    animate={{ opacity: 1 }}
-                    className="absolute left-12 top-3.5 pointer-events-none font-medium text-slate-400"
-                  >
-                    Email Address
-                  </motion.label>
-                )}
-                <div className="relative">
-                  <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-400" />
-                  <motion.input
-                    whileFocus={{ scale: 1.01 }}
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value)
-                      if (errors.email) setErrors({ ...errors, email: undefined })
-                    }}
-                    onFocus={() => setFocusedField('email')}
-                    onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-4 py-3 bg-white/10 border ${
-                      errors.email ? 'border-red-400' : 'border-white/20'
-                    } rounded-xl text-white placeholder-transparent focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all duration-300 backdrop-blur-sm`}
-                    placeholder="Email Address"
-                  />
-                </div>
-                <AnimatePresence>
-                  {errors.email && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="text-red-400 text-sm mt-1.5 flex items-center gap-1"
-                    >
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      {errors.email}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="relative">
-                {(!password && focusedField !== 'password') && (
-                  <motion.label
-                    htmlFor="password"
-                    initial={{ opacity: 1 }}
-                    animate={{ opacity: 1 }}
-                    className="absolute left-12 top-3.5 pointer-events-none font-medium text-slate-400"
-                  >
-                    Password
-                  </motion.label>
-                )}
-                <div className="relative">
-                  <Lock className="absolute left-4 top-3.5 w-5 h-5 text-slate-400" />
-                  <motion.input
-                    whileFocus={{ scale: 1.01 }}
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value)
-                      if (errors.password) setErrors({ ...errors, password: undefined })
-                    }}
-                    onFocus={() => setFocusedField('password')}
-                    onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-12 py-3 bg-white/10 border ${
-                      errors.password ? 'border-red-400' : 'border-white/20'
-                    } rounded-xl text-white placeholder-transparent focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all duration-300 backdrop-blur-sm`}
-                    placeholder="Password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-3.5 text-slate-400 hover:text-white transition-colors"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-                <AnimatePresence>
-                  {errors.password && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="text-red-400 text-sm mt-1.5 flex items-center gap-1"
-                    >
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      {errors.password}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2.5 cursor-pointer group">
-                  <div className="relative">
-                    <input
-                      type="checkbox"
-                      className="peer w-5 h-5 rounded border-2 border-white/30 bg-white/5 checked:bg-blue-500 checked:border-blue-500 focus:ring-2 focus:ring-blue-500/40 transition-all appearance-none cursor-pointer"
-                    />
-                    <svg 
-                      className="absolute top-0.5 left-0.5 w-4 h-4 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="3" 
-                      viewBox="0 0 24 24"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-300 group-hover:text-white transition-colors select-none">Remember me</span>
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
-                >
-                  Forgot password?
-                </Link>
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <motion.button
-                  type="submit"
-                  disabled={isLoading || loginStatus === 'success'}
-                  whileHover={{ scale: isLoading ? 1 : 1.02 }}
-                  whileTap={{ scale: isLoading ? 1 : 0.98 }}
-                  className={`w-full py-3 rounded-xl font-semibold text-white transition-all duration-300 shadow-lg relative overflow-hidden ${
-                    loginStatus === 'success'
-                      ? 'bg-green-500'
-                      : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-blue-500/50'
-                  } disabled:opacity-70 disabled:cursor-not-allowed`}
-                >
-                  <AnimatePresence mode="wait">
-                    {isLoading ? (
-                      <motion.span
-                        key="loading"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex items-center justify-center gap-2"
-                      >
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Signing in...
-                      </motion.span>
-                    ) : loginStatus === 'success' ? (
-                      <motion.span
-                        key="success"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="flex items-center justify-center gap-2"
-                      >
-                        <CheckCircle2 className="w-5 h-5" />
-                        Success!
-                      </motion.span>
-                    ) : (
-                      <motion.span
-                        key="idle"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                      >
-                        Sign In
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </motion.button>
-              </motion.div>
-            </form>
-
-            <motion.p variants={itemVariants} className="text-center mt-6 text-slate-300">
-              Don&apos;t have an account?{' '}
-              <Link
-                href="/signup"
-                className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
-              >
-                Sign up
-              </Link>
-            </motion.p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+        {/* Card */}
+        <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-xl p-8">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p className="text-slate-400">Sign in to your account to continue</p>
           </div>
-        </motion.div>
 
-        <motion.p
-          variants={itemVariants}
-          className="text-center mt-8 text-slate-400 text-sm"
-        >
-          Protected by advanced encryption and security protocols
-        </motion.p>
-      </motion.div>
+          {/* General Error Message */}
+          {generalError && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+              <p className="text-red-400 text-sm">{generalError}</p>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email Input */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5" />
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className={`w-full pl-10 pr-4 py-2.5 bg-slate-700 border rounded-lg text-white placeholder-slate-500 transition-colors focus:outline-none focus:ring-2 ${
+                    errors.email
+                      ? 'border-red-500 focus:ring-red-500/50'
+                      : 'border-slate-600 focus:ring-blue-500/50 focus:border-blue-500'
+                  }`}
+                  aria-label="Email Address"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? 'email-error' : undefined}
+                />
+              </div>
+              {errors.email && (
+                <p id="email-error" className="text-red-400 text-sm mt-1.5">{errors.email}</p>
+              )}
+            </div>
+
+            {/* Password Input */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5" />
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className={`w-full pl-10 pr-12 py-2.5 bg-slate-700 border rounded-lg text-white placeholder-slate-500 transition-colors focus:outline-none focus:ring-2 ${
+                    errors.password
+                      ? 'border-red-500 focus:ring-red-500/50'
+                      : 'border-slate-600 focus:ring-blue-500/50 focus:border-blue-500'
+                  }`}
+                  aria-label="Password"
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? 'password-error' : undefined}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors p-1"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p id="password-error" className="text-red-400 text-sm mt-1.5">{errors.password}</p>
+              )}
+            </div>
+
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between pt-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-2 focus:ring-blue-500/50 cursor-pointer"
+                  aria-label="Remember me"
+                />
+                <span className="text-sm text-slate-400 select-none">Remember me</span>
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            {/* Sign In Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full mt-8 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </button>
+          </form>
+
+          {/* Footer */}
+          <p className="text-center text-slate-400 text-sm mt-6">
+            Don't have an account?{' '}
+            <Link
+              href="/signup"
+              className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
