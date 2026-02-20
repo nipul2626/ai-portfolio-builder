@@ -1,12 +1,35 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Points, PointMaterial } from '@react-three/drei'
-import * as THREE from 'three'
+import { useRef, useMemo, Suspense } from 'react'
+import dynamic from 'next/dynamic'
+
+// Dynamically import Three.js components to avoid SSR issues
+const Canvas = dynamic(
+  () => import('@react-three/fiber').then((mod) => mod.Canvas),
+  { ssr: false }
+)
+
+const Points = dynamic(
+  () => import('@react-three/drei').then((mod) => mod.Points),
+  { ssr: false }
+)
+
+const PointMaterial = dynamic(
+  () => import('@react-three/drei').then((mod) => mod.PointMaterial),
+  { ssr: false }
+)
+
+// Fallback loading component
+function ParticlesFallback() {
+  return (
+    <div className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-900/50 to-slate-950" />
+    </div>
+  )
+}
 
 function ParticleField() {
-  const ref = useRef<THREE.Points>(null!)
+  const ref = useRef<any>(null)
   
   // Generate random particle positions in a sphere
   const [positions, colors] = useMemo(() => {
@@ -26,36 +49,22 @@ function ParticleField() {
       // Color gradient (blue to purple to cyan)
       const colorMix = Math.random()
       if (colorMix < 0.33) {
-        colors[i * 3] = 0.4 + Math.random() * 0.3     // R
-        colors[i * 3 + 1] = 0.5 + Math.random() * 0.3 // G
-        colors[i * 3 + 2] = 1                          // B
+        colors[i * 3] = 0.4 + Math.random() * 0.3
+        colors[i * 3 + 1] = 0.5 + Math.random() * 0.3
+        colors[i * 3 + 2] = 1
       } else if (colorMix < 0.66) {
-        colors[i * 3] = 0.6 + Math.random() * 0.4     // R
-        colors[i * 3 + 1] = 0.3 + Math.random() * 0.3 // G
-        colors[i * 3 + 2] = 1                          // B
+        colors[i * 3] = 0.6 + Math.random() * 0.4
+        colors[i * 3 + 1] = 0.3 + Math.random() * 0.3
+        colors[i * 3 + 2] = 1
       } else {
-        colors[i * 3] = 0.3 + Math.random() * 0.3     // R
-        colors[i * 3 + 1] = 0.8 + Math.random() * 0.2 // G
-        colors[i * 3 + 2] = 1                          // B
+        colors[i * 3] = 0.3 + Math.random() * 0.3
+        colors[i * 3 + 1] = 0.8 + Math.random() * 0.2
+        colors[i * 3 + 2] = 1
       }
     }
     
     return [positions, colors]
   }, [])
-  
-  // Animate particles
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime()
-    
-    if (ref.current) {
-      ref.current.rotation.x = time * 0.05
-      ref.current.rotation.y = time * 0.075
-      
-      // Subtle pulsing effect
-      const scale = 1 + Math.sin(time * 0.5) * 0.1
-      ref.current.scale.set(scale, scale, scale)
-    }
-  })
   
   return (
     <Points ref={ref} positions={positions} stride={3}>
@@ -66,7 +75,6 @@ function ParticleField() {
         depthWrite={false}
         transparent
         opacity={0.8}
-        blending={THREE.AdditiveBlending}
       />
       <bufferAttribute
         attach="attributes-color"
@@ -80,17 +88,19 @@ function ParticleField() {
 
 export function ThreeParticleBackground() {
   return (
-    <div className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 75 }}
-        className="w-full h-full"
-      >
-        <ambientLight intensity={0.5} />
-        <ParticleField />
-      </Canvas>
-      
-      {/* Overlay gradient for better readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-slate-900/40 pointer-events-none" />
-    </div>
+    <Suspense fallback={<ParticlesFallback />}>
+      <div className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900">
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 75 }}
+          className="w-full h-full"
+        >
+          <ambientLight intensity={0.5} />
+          <ParticleField />
+        </Canvas>
+        
+        {/* Overlay gradient for better readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-slate-900/40 pointer-events-none" />
+      </div>
+    </Suspense>
   )
 }
