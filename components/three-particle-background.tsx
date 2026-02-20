@@ -68,12 +68,16 @@ export function ThreeParticleBackground() {
         particle.y += particle.vy
         particle.z -= particle.vz
 
-        // Wrap around edges
-        if (particle.x < 0) particle.x = canvas.width
-        if (particle.x > canvas.width) particle.x = 0
-        if (particle.y < 0) particle.y = canvas.height
-        if (particle.y > canvas.height) particle.y = 0
-        if (particle.z < 0) particle.z = 1000
+        // Wrap around edges smoothly
+        if (particle.x < -10) particle.x = canvas.width + 10
+        if (particle.x > canvas.width + 10) particle.x = -10
+        if (particle.y < -10) particle.y = canvas.height + 10
+        if (particle.y > canvas.height + 10) particle.y = -10
+        if (particle.z < 0) {
+          particle.z = 1000
+          particle.x = Math.random() * canvas.width
+          particle.y = Math.random() * canvas.height
+        }
 
         // Calculate size based on depth
         const scale = 1000 / (1000 - particle.z)

@@ -90,14 +90,16 @@ export default function LoginPage() {
 
   const floatingLabelVariants = {
     focused: {
-      y: -24,
+      y: -28,
       scale: 0.85,
+      x: -8,
       color: 'rgb(59, 130, 246)',
       transition: { duration: 0.2 }
     },
     unfocused: {
       y: 0,
       scale: 1,
+      x: 0,
       color: 'rgb(148, 163, 184)',
       transition: { duration: 0.2 }
     }
@@ -181,14 +183,16 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <motion.div variants={itemVariants} className="relative">
-                <motion.label
-                  htmlFor="email"
-                  variants={floatingLabelVariants}
-                  animate={focusedField === 'email' || email ? 'focused' : 'unfocused'}
-                  className="absolute left-12 top-3.5 pointer-events-none font-medium origin-left"
-                >
-                  Email Address
-                </motion.label>
+                {(!email && focusedField !== 'email') && (
+                  <motion.label
+                    htmlFor="email"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute left-12 top-3.5 pointer-events-none font-medium text-slate-400"
+                  >
+                    Email Address
+                  </motion.label>
+                )}
                 <div className="relative">
                   <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-400" />
                   <motion.input
@@ -224,14 +228,16 @@ export default function LoginPage() {
               </motion.div>
 
               <motion.div variants={itemVariants} className="relative">
-                <motion.label
-                  htmlFor="password"
-                  variants={floatingLabelVariants}
-                  animate={focusedField === 'password' || password ? 'focused' : 'unfocused'}
-                  className="absolute left-12 top-3.5 pointer-events-none font-medium origin-left"
-                >
-                  Password
-                </motion.label>
+                {(!password && focusedField !== 'password') && (
+                  <motion.label
+                    htmlFor="password"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute left-12 top-3.5 pointer-events-none font-medium text-slate-400"
+                  >
+                    Password
+                  </motion.label>
+                )}
                 <div className="relative">
                   <Lock className="absolute left-4 top-3.5 w-5 h-5 text-slate-400" />
                   <motion.input
@@ -274,16 +280,27 @@ export default function LoginPage() {
               </motion.div>
 
               <motion.div variants={itemVariants} className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 rounded border-white/20 bg-white/10 text-blue-500 focus:ring-2 focus:ring-blue-500/40 transition-all"
-                  />
-                  <span className="text-slate-300 group-hover:text-white transition-colors">Remember me</span>
+                <label className="flex items-center gap-2.5 cursor-pointer group">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      className="peer w-5 h-5 rounded border-2 border-white/30 bg-white/5 checked:bg-blue-500 checked:border-blue-500 focus:ring-2 focus:ring-blue-500/40 transition-all appearance-none cursor-pointer"
+                    />
+                    <svg 
+                      className="absolute top-0.5 left-0.5 w-4 h-4 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="3" 
+                      viewBox="0 0 24 24"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-300 group-hover:text-white transition-colors select-none">Remember me</span>
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-blue-400 hover:text-blue-300 transition-colors"
+                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
                 >
                   Forgot password?
                 </Link>
