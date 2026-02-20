@@ -90,7 +90,7 @@ function TestimonialCard({
         animationIterationCount: "infinite",
         animationDelay: `${index * 0.3}s`,
       }}
-      onMouseEnter={() => setIsHovered(true)}
+      onouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
