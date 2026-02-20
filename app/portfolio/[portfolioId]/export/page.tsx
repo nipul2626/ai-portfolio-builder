@@ -95,7 +95,14 @@ interface ExportOptions {
   removeTracking: boolean
 }
 
-export default function ExportPage({ params }: { params: { portfolioId: string } }) {
+import { use } from 'react'
+
+export default function ExportPage({
+                                     params,
+                                   }: {
+  params: Promise<{ portfolioId: string }>
+}) {
+  const { portfolioId } = use(params)
   const [selectedFormat, setSelectedFormat] = useState<string | null>(null)
   const [expandedOptions, setExpandedOptions] = useState<Record<string, boolean>>({})
   const [exportOptions, setExportOptions] = useState<ExportOptions>({
@@ -157,7 +164,7 @@ export default function ExportPage({ params }: { params: { portfolioId: string }
             </div>
 
             <div className="flex gap-3">
-              <Link href={`/portfolio/${params.portfolioId}`}>
+              <Link href={`/portfolio/${portfolioId}`}>
                 <button className="neu-card px-6 py-3 rounded-lg hover:scale-102 transition-transform flex items-center gap-2 group">
                   <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                   Editor
