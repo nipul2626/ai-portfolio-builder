@@ -4,8 +4,18 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import { Mail, Lock, Github, Chrome, Linkedin, Eye, EyeOff, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
-import { ThreeParticleBackground } from '@/components/three-particle-background'
+
+const ThreeParticleBackground = dynamic(
+  () => import('@/components/three-particle-background').then(mod => ({ default: mod.ThreeParticleBackground })),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900" />
+    )
+  }
+)
 
 export default function LoginPage() {
   const router = useRouter()
