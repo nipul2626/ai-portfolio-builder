@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useWizard } from '@/contexts/wizard-context';
 import { Trash2, Plus, ChevronDown, ChevronUp } from 'lucide-react';
-import { v4 as uuidv4 } from 'uuid';
+const uuidv4 = () => crypto.randomUUID();
 
 export default function Step4Projects() {
   const { data, updateData, nextStep, prevStep } = useWizard();

@@ -1,17 +1,8 @@
 'use client';
 
 import { useWizard } from '@/contexts/wizard-context';
-import {
-  Mail,
-  Phone,
-  Globe,
-  Github,
-  Linkedin,
-  Twitter,
-  Dribbble,
-  Behance,
-  Instagram,
-} from 'lucide-react';
+import { FaBehance } from "react-icons/fa";
+import {Mail, Phone, Globe, Github, Linkedin, Twitter, Dribbble, Instagram,} from 'lucide-react';
 
 const socialLinks = [
   {
@@ -38,12 +29,7 @@ const socialLinks = [
     icon: Dribbble,
     placeholder: 'https://dribbble.com/username',
   },
-  {
-    key: 'behance',
-    label: 'Behance',
-    icon: Behance,
-    placeholder: 'https://behance.net/username',
-  },
+
   {
     key: 'instagram',
     label: 'Instagram',
