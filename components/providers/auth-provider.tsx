@@ -4,10 +4,12 @@ import { useEffect } from 'react'
 import { useAuthStore } from '@/store/auth-store'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { initializeAuth } = useAuthStore()
+  const initializeAuth = useAuthStore((state) => state.initializeAuth)
 
   useEffect(() => {
-    initializeAuth()
+    if (initializeAuth) {
+      initializeAuth()
+    }
   }, [initializeAuth])
 
   return <>{children}</>
