@@ -45,11 +45,13 @@ export function ResponsivePreviewModal({ isOpen, onClose, templateId }: Responsi
   }
 
   const dims = getDeviceDimensions()
-  const scale = Math.min(
-    (window.innerWidth * 0.8) / dims.width,
-    (window.innerHeight * 0.7) / dims.height,
-    1
-  )
+  const scale = typeof window !== 'undefined' 
+    ? Math.min(
+        (window.innerWidth * 0.8) / dims.width,
+        (window.innerHeight * 0.7) / dims.height,
+        1
+      )
+    : 0.5
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
