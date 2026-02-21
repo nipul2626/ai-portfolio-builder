@@ -2,7 +2,12 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { WizardBackground } from '@/components/wizard-background'
+import dynamic from 'next/dynamic'
+
+const WizardBackground = dynamic(
+    () => import('@/components/wizard-background').then(mod => mod.WizardBackground),
+    { ssr: false }
+)
 import { ProgressConstellation } from '@/components/progress-constellation'
 import { ChooseMethodIsland } from '@/components/islands/choose-method-island'
 import { TemplateIsland } from '@/components/islands/template-island'
