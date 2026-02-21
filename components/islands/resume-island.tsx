@@ -10,13 +10,20 @@ interface ResumeIslandProps {
   onResumeUpload: (data: any) => void
   onBack: () => void
 }
+interface ResumeData {
+  name: string
+  role: string
+  skills: string[]
+  experience: number
+  projects: number
+}
 
 type UploadState = 'idle' | 'uploading' | 'scanning' | 'extracting' | 'filling' | 'success' | 'error'
 
 export function ResumeIsland({ onResumeUpload, onBack }: ResumeIslandProps) {
   const [uploadState, setUploadState] = useState<UploadState>('idle')
   const [uploadProgress, setUploadProgress] = useState(0)
-  const [extractedData, setExtractedData] = useState<any>(null)
+  const [extractedData, setExtractedData] = useState<ResumeData | null>(null)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -219,7 +226,7 @@ export function ResumeIsland({ onResumeUpload, onBack }: ResumeIslandProps) {
                 {/* Form fields filling animation */}
                 {uploadState === 'filling' && extractedData && (
                   <div className="absolute inset-0 p-8 space-y-4">
-                    {Object.entries(extractedData).map(([key, value], i) => (
+                    {Object.entries(extractedData as ResumeData).map(([key, value], i) => (
                       <motion.div
                         key={key}
                         initial={{ opacity: 0, x: -20 }}
@@ -296,7 +303,7 @@ export function ResumeIsland({ onResumeUpload, onBack }: ResumeIslandProps) {
               </motion.div>
 
               <h3 className="text-3xl font-bold text-white mb-4">Resume analyzed successfully!</h3>
-              
+
               {/* Data preview cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 {Object.entries(extractedData).map(([key, value], i) => (
