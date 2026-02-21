@@ -14,6 +14,11 @@ import { VersionHistoryPanel } from '@/components/customizer/version-history-pan
 import { AchievementNotification, AchievementProgress } from '@/components/customizer/achievement-notification'
 import { CodeExportPanel } from '@/components/customizer/code-export-panel'
 import { WhatsThisMode } from '@/components/customizer/whats-this-mode'
+import { AIAssistant } from '@/components/customizer/ai-assistant'
+import { CollaborationPanel } from '@/components/customizer/collaboration-panel'
+import { SettingsPanel } from '@/components/customizer/settings-panel'
+import { KeyboardShortcuts } from '@/components/customizer/keyboard-shortcuts'
+import { ResponsivePreviewModal } from '@/components/customizer/responsive-preview-modal'
 import { useUIStore } from '@/store/ui-store'
 import { Button } from '@/components/ui/button'
 
@@ -130,6 +135,12 @@ export default function TemplateCustomizerPage({
       <AchievementNotification />
       <AchievementProgress />
       <WhatsThisMode />
+      <AIAssistant />
+      <ResponsivePreviewModal 
+        isOpen={previewOpen} 
+        onClose={() => setPreviewOpen(false)}
+        templateId={templateId}
+      />
 
       {/* Top Action Bar */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card" data-tutorial="save-button">
@@ -208,12 +219,18 @@ export default function TemplateCustomizerPage({
             </button>
           </div>
 
+          <KeyboardShortcuts />
+
           <button
             onClick={toggleWhatsThisMode}
             className="p-2 rounded-lg hover:bg-accent transition-colors"
           >
             <HelpCircle className="w-5 h-5" />
           </button>
+
+          <CollaborationPanel />
+
+          <SettingsPanel />
 
           <CodeExportPanel />
 
