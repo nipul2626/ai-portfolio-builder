@@ -315,7 +315,7 @@ export default function PortfolioDashboardClient({ portfolioId }: PortfolioDashb
                         {portfolio.status.charAt(0).toUpperCase() + portfolio.status.slice(1)}
                       </span>
                       <span className="text-xs text-slate-400 w-20 text-right">{portfolio.views.toLocaleString()} views</span>
-                      <span className="text-xs text-slate-500 w-24 text-right">{new Date(portfolio.updated).toLocaleDateString()}</span>
+                      <span className="text-xs text-slate-500 w-24 text-right">{new Date(portfolio.updated).toISOString().split('T')[0]}</span>
                     </div>
                   </Link>
                 </motion.div>
@@ -401,7 +401,7 @@ export default function PortfolioDashboardClient({ portfolioId }: PortfolioDashb
                             <span className="text-xs text-slate-400">{portfolio.views.toLocaleString()} views</span>
                             <span className="text-[10px] text-slate-500 flex items-center gap-1">
                               <Clock className="w-3 h-3" />
-                              {new Date(portfolio.updated).toLocaleDateString()}
+                              {new Date(portfolio.updated).toISOString().split('T')[0]}
                             </span>
                           </div>
                         </div>
