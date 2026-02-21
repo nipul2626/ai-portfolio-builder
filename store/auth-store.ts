@@ -10,6 +10,7 @@ interface AuthActions {
   refreshToken: () => Promise<void>
   updateUser: (updates: Partial<User>) => void
   clearError: () => void
+  initializeAuth: () => void
 }
 
 export const useAuthStore = create<AuthState & AuthActions>()(
@@ -119,6 +120,17 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
       clearError: () => {
         set({ error: null })
+      },
+
+      initializeAuth: () => {
+        const { token, refreshToken } = get()
+        // Check if token exists and is valid
+        if (token && refreshToken) {
+          // Optionally verify token validity here
+          set({ isAuthenticated: true })
+        } else {
+          set({ isAuthenticated: false, user: null, token: null, refreshToken: null })
+        }
       },
     }),
     {
