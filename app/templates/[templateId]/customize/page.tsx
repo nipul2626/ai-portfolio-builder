@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, use } from 'react'
 import { ChevronLeft, Save, Eye, MoreVertical, RotateCcw, RotateCw, ZoomIn, ZoomOut, Maximize2, Monitor, Tablet, Smartphone } from 'lucide-react'
 import Link from 'next/link'
 import CustomizerTopBar from './components/customizer-top-bar'
@@ -28,7 +28,12 @@ interface HistoryAction {
 
 type DeviceType = 'desktop' | 'tablet' | 'mobile'
 
-export default function TemplateCustomizerPage({ params }: { params: { templateId: string } }) {
+export default function TemplateCustomizerPage({
+                                                 params,
+                                               }: {
+  params: Promise<{ templateId: string }>
+}) {
+  const { templateId } = use(params)
   const [templateName, setTemplateName] = useState('My Custom Template')
   const [isEditingName, setIsEditingName] = useState(false)
   const [zoom, setZoom] = useState(100)
@@ -113,7 +118,7 @@ export default function TemplateCustomizerPage({ params }: { params: { templateI
         canUndo={historyIndex > 0}
         canRedo={historyIndex < history.length - 1}
         onPreview={() => setPreviewOpen(true)}
-        templateId={params.templateId}
+        templateId={templateId}
       />
 
       {/* Main Content */}
