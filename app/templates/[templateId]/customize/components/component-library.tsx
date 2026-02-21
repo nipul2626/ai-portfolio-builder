@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, ChevronDown, Star, Eye, Sparkles, Clock, HelpCircle, Plus } from 'lucide-react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -317,9 +317,11 @@ export default function ComponentLibrary({ onComponentAdd }: ComponentLibraryPro
         <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">{previewComponent?.name}</DialogTitle>
+            <DialogDescription>
+              {previewComponent?.description || 'Preview this component before adding it to your canvas'}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-muted-foreground">{previewComponent?.description}</p>
             <div className="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg flex items-center justify-center border border-border">
               <div className="text-center">
                 <div className="text-6xl mb-4">🎨</div>

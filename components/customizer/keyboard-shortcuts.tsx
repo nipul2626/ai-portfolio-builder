@@ -6,6 +6,7 @@ import { Command, Keyboard } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -106,6 +107,9 @@ export function KeyboardShortcuts() {
             <Keyboard className="w-5 h-5" />
             Keyboard Shortcuts
           </DialogTitle>
+          <DialogDescription>
+            Master these keyboard shortcuts to speed up your workflow
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-1 overflow-y-auto max-h-[60vh]">

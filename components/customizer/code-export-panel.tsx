@@ -6,7 +6,7 @@ import { Code, Copy, Download, ExternalLink, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
 interface CodeExportPanelProps {
   html?: string
@@ -139,6 +139,9 @@ export default {
               <Code className="w-5 h-5" />
               Export Code
             </DialogTitle>
+            <DialogDescription>
+              Export your portfolio code in multiple formats including HTML, CSS, React, and Vue
+            </DialogDescription>
           </DialogHeader>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">

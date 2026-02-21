@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -141,6 +142,9 @@ export function CollaborationPanel() {
                 <Users className="w-5 h-5" />
                 Collaborate
               </DialogTitle>
+              <DialogDescription>
+                Invite team members to collaborate on your portfolio in real-time
+              </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-6">
