@@ -4,33 +4,19 @@ import { useEffect } from 'react'
 
 export function useAuth() {
   const router = useRouter()
-  const { 
-    user, 
-    isAuthenticated, 
-    isLoading, 
-    login, 
-    logout, 
+
+  const {
+    user,
+    isAuthenticated,
+    isLoading,
+    login,
+    logout,
     register,
-    updateProfile,
-    verifyEmail,
-    resetPassword
+    refreshToken,
+    updateUser,
+    clearError,
+    initializeAuth,
   } = useAuthStore()
-
-  const requireAuth = (redirectTo = '/auth/login') => {
-    useEffect(() => {
-      if (!isLoading && !isAuthenticated) {
-        router.push(redirectTo)
-      }
-    }, [isLoading, isAuthenticated, redirectTo])
-  }
-
-  const requireGuest = (redirectTo = '/dashboard') => {
-    useEffect(() => {
-      if (!isLoading && isAuthenticated) {
-        router.push(redirectTo)
-      }
-    }, [isLoading, isAuthenticated, redirectTo])
-  }
 
   return {
     user,
@@ -39,11 +25,10 @@ export function useAuth() {
     login,
     logout,
     register,
-    updateProfile,
-    verifyEmail,
-    resetPassword,
-    requireAuth,
-    requireGuest,
+    refreshToken,
+    updateUser,
+    clearError,
+    initializeAuth,
   }
 }
 
@@ -53,6 +38,19 @@ export function useRequireAuth(redirectTo = '/auth/login') {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
+      router.push(redirectTo)
+    }
+  }, [isLoading, isAuthenticated, redirectTo, router])
+
+  return { isAuthenticated, isLoading }
+}
+
+export function useRequireGuest(redirectTo = '/dashboard') {
+  const { isAuthenticated, isLoading } = useAuthStore()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
       router.push(redirectTo)
     }
   }, [isLoading, isAuthenticated, redirectTo, router])

@@ -18,15 +18,18 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
 
     try {
-      await login(email, password)
+      await login({ email, password })
       router.push('/dashboard')
-    } catch (err: any) {
-      setError(err.message || 'Invalid credentials')
+    } catch (err) {
+      const message =
+          err instanceof Error ? err.message : 'Invalid credentials'
+
+      setError(message)
     }
   }
 
@@ -61,7 +64,7 @@ export default function LoginPage() {
           <div className="space-y-3">
             <Button
               variant="outline"
-              className="w-full h-12 gap-2"
+              className="magnetic w-full h-12 gap-2"
               onClick={() => console.log('[v0] Google login')}
             >
               <Chrome className="w-5 h-5" />

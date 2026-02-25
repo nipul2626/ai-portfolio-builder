@@ -25,6 +25,7 @@ interface EditorActions {
   deleteSection: (id: string) => void
   reorderSections: (order: string[]) => void
   selectSection: (id: string | null) => void
+  addHistoryEntry: (description: string) => void
   undo: () => void
   redo: () => void
   saveToHistory: (description: string) => void
@@ -92,6 +93,7 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     set({ selectedSection: id })
   },
 
+
   saveToHistory: (description: string) => {
     set((state) => {
       const newHistoryItem: HistoryItem = {
@@ -114,6 +116,9 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
         canRedo: false,
       }
     })
+  },
+  addHistoryEntry: (description: string) => {
+    get().saveToHistory(description)
   },
 
   undo: () => {

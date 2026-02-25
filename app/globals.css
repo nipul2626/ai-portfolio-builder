@@ -218,19 +218,7 @@ html {
   }
 }
 
-@keyframes confetti {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(0deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(
-      calc((var(--confetti-speed, 2) * 60px * cos(var(--confetti-angle, 45deg))) - 30px),
-      calc(var(--confetti-speed, 2) * 120px)
-    ) rotate(720deg);
-  }
-}
+
 
 @keyframes pingSlow {
   0% {
@@ -268,9 +256,7 @@ html {
   animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-confetti {
-  animation: confetti 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
+
 
 .animate-ping-slow {
   animation: pingSlow 2s cubic-bezier(0, 0, 0.2, 1) infinite;

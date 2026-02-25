@@ -21,7 +21,10 @@ interface ComponentLibraryProps {
   onComponentAdd: (component: any) => void
 }
 
-const componentCategories = [
+const componentCategories: {
+  name: string
+  items: ComponentItem[]
+}[] = [
   {
     name: 'SECTIONS',
     items: [
